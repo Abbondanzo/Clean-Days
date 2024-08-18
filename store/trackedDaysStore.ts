@@ -7,9 +7,10 @@ import {
   persist,
   StateStorage,
 } from 'zustand/middleware';
+import { DEFAULT_NO_DAY_VALUE } from '../constants/Days';
 
 type TrackedDays = {
-  [year: string]: { [month: string]: { [day: string]: number } };
+  [year: string]: { [month: string]: number[] };
 };
 
 // Custom storage object
@@ -30,17 +31,27 @@ interface Store {
   setCountForDay: (date: Date, count: number) => void;
 }
 
+const getEmptyMonthArray = (date: Date): number[] => {
+  const daysInMonth = new Date(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    0
+  ).getDate();
+  return new Array(daysInMonth).fill(DEFAULT_NO_DAY_VALUE);
+};
+
 export const useTrackedDaysStore = create<Store>()(
   devtools(
     persist(
-      (set, get) => ({
+      (set) => ({
         trackedDays: {},
         setCountForDay: (date, count) => {
           set(
             produce((state: Store) => {
               const curYear = state.trackedDays[date.getFullYear()] || {};
               state.trackedDays[date.getFullYear()] = curYear;
-              const curMonth = curYear[date.getMonth()] || {};
+              const curMonth =
+                curYear[date.getMonth()] || getEmptyMonthArray(date);
               curYear[date.getMonth()] = curMonth;
               curMonth[date.getDate()] = count;
               state.trackedDays[date.getFullYear()] = curYear;
@@ -63,8 +74,11 @@ export const useTrackedDaysStore = create<Store>()(
 
 export const selectByDate = (date: Date) => (state: Store) => {
   const curYear = state.trackedDays[date.getFullYear()];
-  if (!curYear) return 0;
+  if (!curYear) return DEFAULT_NO_DAY_VALUE;
   const curMonth = curYear[date.getMonth()];
-  if (!curMonth) return 0;
-  return curMonth[date.getDate()] || 0;
+  if (!curMonth) return DEFAULT_NO_DAY_VALUE;
+  const currentDayValue = curMonth[date.getDate()];
+  return typeof currentDayValue === 'number'
+    ? currentDayValue
+    : DEFAULT_NO_DAY_VALUE;
 };

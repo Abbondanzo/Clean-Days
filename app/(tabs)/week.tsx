@@ -24,6 +24,7 @@ import {
   selectByDate,
   useTrackedDaysStore,
 } from '../../store/trackedDaysStore';
+import { DEFAULT_NO_DAY_VALUE } from '../../constants/Days';
 
 type YearMonthDay = [number, number, number];
 
@@ -47,16 +48,30 @@ function WeekRow({ date }: WeekRowProps) {
   const dayOfWeek = SEVEN_DAYS[date.getDay()];
   const currentCount = useTrackedDaysStore(selectByDate(date));
 
+  console.log(currentCount);
+
   return (
     <View style={styles.row}>
-      <TouchableOpacity onPress={() => setCountForDay(date, currentCount - 1)}>
-        <ThemedText>-</ThemedText>
-      </TouchableOpacity>
       <ThemedText>
         {dayOfWeek} {date.getFullYear()}-{date.getMonth() + 1}-{date.getDate()}
       </ThemedText>
-      <ThemedText>{currentCount}</ThemedText>
-      <TouchableOpacity onPress={() => setCountForDay(date, currentCount + 1)}>
+      <TouchableOpacity
+        disabled={currentCount < 1}
+        onPress={() => setCountForDay(date, currentCount - 1)}
+      >
+        <ThemedText>-</ThemedText>
+      </TouchableOpacity>
+      <ThemedText>
+        {currentCount === DEFAULT_NO_DAY_VALUE ? '-' : currentCount}
+      </ThemedText>
+      <TouchableOpacity
+        onPress={() =>
+          setCountForDay(
+            date,
+            currentCount === DEFAULT_NO_DAY_VALUE ? 1 : currentCount + 1
+          )
+        }
+      >
         <ThemedText>+</ThemedText>
       </TouchableOpacity>
     </View>
@@ -77,8 +92,6 @@ export default function WeekScreen() {
       (oldStart) => new Date(oldStart.getTime() + 7 * ONE_DAY)
     );
   }, []);
-
-  const setCountForDay = useTrackedDaysStore((state) => state.setCountForDay);
 
   return (
     <ThemedScrollView>
