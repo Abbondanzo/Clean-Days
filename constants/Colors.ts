@@ -6,10 +6,26 @@
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
 
-export const Colors = {
+interface Theme {
+  text: string;
+  background: string;
+  buttonPrimary: string;
+  tint: string;
+  icon: string;
+  tabIconDefault: string;
+  tabIconSelected: string;
+}
+
+interface Colors {
+  light: Theme;
+  dark: Theme;
+}
+
+export const Colors: Colors = {
   light: {
     text: '#11181C',
     background: '#fff',
+    buttonPrimary: tintColorLight,
     tint: tintColorLight,
     icon: '#687076',
     tabIconDefault: '#687076',
@@ -18,6 +34,7 @@ export const Colors = {
   dark: {
     text: '#ECEDEE',
     background: '#151718',
+    buttonPrimary: tintColorDark,
     tint: tintColorDark,
     icon: '#9BA1A6',
     tabIconDefault: '#9BA1A6',
