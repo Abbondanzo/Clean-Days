@@ -1,12 +1,13 @@
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Box } from '@/components/ui/box';
-import { Button } from '@/components/ui/button';
+import { Button, ButtonText } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { DEFAULT_NO_DAY_VALUE } from '@/constants/Days';
 import { selectByDate, useTrackedDaysStore } from '@/store/trackedDaysStore';
 import { useCallback, useState } from 'react';
+import { Card } from '@/components/ui/card';
 
 type YearMonthDay = [number, number, number];
 
@@ -35,14 +36,14 @@ function WeekRow({ date }: WeekRowProps) {
       <Text>
         {dayOfWeek} {date.getFullYear()}-{date.getMonth() + 1}-{date.getDate()}
       </Text>
-      <TouchableOpacity
+      <Button
         disabled={currentCount < 1}
         onPress={() => setCountForDay(date, currentCount - 1)}
       >
-        <Text>-</Text>
-      </TouchableOpacity>
+        <ButtonText>-</ButtonText>
+      </Button>
       <Text>{currentCount === DEFAULT_NO_DAY_VALUE ? '-' : currentCount}</Text>
-      <TouchableOpacity
+      <Button
         onPress={() =>
           setCountForDay(
             date,
@@ -50,8 +51,8 @@ function WeekRow({ date }: WeekRowProps) {
           )
         }
       >
-        <Text>+</Text>
-      </TouchableOpacity>
+        <ButtonText>+</ButtonText>
+      </Button>
     </View>
   );
 }
@@ -77,23 +78,38 @@ export default function WeekScreen() {
         <Heading size="lg">Welcome!</Heading>
       </Box>
 
-      <Box style={styles.stepContainer}>
-        <Text>
-          {currentWeekStart.getMonth() + 1}/{currentWeekStart.getDate()}
-        </Text>
+      <Card>
+        <Box style={styles.stepContainer}>
+          <Text>
+            {currentWeekStart.getMonth() + 1}/{currentWeekStart.getDate()}
+          </Text>
+        </Box>
+        <Box style={styles.stepContainer}>
+          {SEVEN_DAYS.map((_, index) => {
+            const day = new Date(currentWeekStart.getTime() + ONE_DAY * index);
+            return <WeekRow key={index} date={day} />;
+          })}
+        </Box>
+      </Card>
+
+      <Box>
+        <Button
+          onPress={goToPrevWeek}
+          size="md"
+          variant="solid"
+          action="primary"
+        >
+          <ButtonText>Previous Week</ButtonText>
+        </Button>
+        <Button
+          onPress={goToNextWeek}
+          size="md"
+          variant="solid"
+          action="primary"
+        >
+          <ButtonText>Next Week</ButtonText>
+        </Button>
       </Box>
-      <Box style={styles.stepContainer}>
-        {SEVEN_DAYS.map((_, index) => {
-          const day = new Date(currentWeekStart.getTime() + ONE_DAY * index);
-          return <WeekRow key={index} date={day} />;
-        })}
-      </Box>
-      <Button onPress={goToPrevWeek}>
-        <Text>Previous Week</Text>
-      </Button>
-      <TouchableOpacity onPress={goToNextWeek}>
-        <Text>Next Week</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 }

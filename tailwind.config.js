@@ -4,10 +4,12 @@ const gluestackPlugin = require('@gluestack-ui/nativewind-utils/tailwind-plugin'
 module.exports = {
   darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : 'media',
   content: [
-    './src/**/*.{html,js,jsx,ts,tsx}',
-    './src/core-components/**/**/*.{html,js,jsx,ts,tsx}',
-    './src/components/**/*.{html,js,jsx,ts,tsx,mdx}',
-    './src/hooks/**/*.{html,js,jsx,ts,tsx,mdx}',
+    './app/**/*.{html,js,jsx,ts,tsx}',
+    './components/**/*.{html,js,jsx,ts,tsx,mdx}',
+    './constants/**/*.{html,js,jsx,ts,tsx}',
+    './hooks/**/*.{html,js,jsx,ts,tsx,mdx}',
+    './store/**/*.{html,js,jsx,ts,tsx}',
+    './utils/**/*.{html,js,jsx,ts,tsx}',
   ],
   presets: [require('nativewind/preset')],
   safelist: [
@@ -175,7 +177,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        heading: undefined,
+        heading: ['Roboto', 'sans-serif'],
         body: undefined,
         mono: undefined,
         roboto: ['Roboto', 'sans-serif'],

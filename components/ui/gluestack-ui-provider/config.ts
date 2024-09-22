@@ -1,5 +1,7 @@
 'use client';
-import { vars } from 'nativewind';
+import { vars, StyleSheet, verifyInstallation } from 'nativewind';
+
+console.log(verifyInstallation());
 
 export const config = {
   light: vars({
