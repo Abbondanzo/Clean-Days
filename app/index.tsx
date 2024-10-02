@@ -1,8 +1,8 @@
-import { DEFAULT_NO_DAY_VALUE } from '@/constants/Days';
-import { selectByDate, useTrackedDaysStore } from '@/store/trackedDaysStore';
-import { Button, Card, Layout, Text } from '@ui-kitten/components';
+import { Button, Layout, Text } from '@ui-kitten/components';
 import { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { DEFAULT_NO_DAY_VALUE } from '../constants/Days';
+import { selectByDate, useTrackedDaysStore } from '../store/trackedDaysStore';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 const SEVEN_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
@@ -25,27 +25,36 @@ function WeekRow({ date }: WeekRowProps) {
   const currentCount = useTrackedDaysStore(selectByDate(date));
 
   return (
-    <View style={styles.row}>
+    <View style={[styles.row, styles.dayRow]}>
       <Text>
-        {dayOfWeek} {date.getFullYear()}-{date.getMonth() + 1}-{date.getDate()}
+        {dayOfWeek}, {date.getFullYear()}-{date.getMonth() + 1}-{date.getDate()}
       </Text>
-      <Button
-        disabled={currentCount < 1}
-        onPress={() => setCountForDay(date, currentCount - 1)}
-      >
-        -
-      </Button>
-      <Text>{currentCount === DEFAULT_NO_DAY_VALUE ? '-' : currentCount}</Text>
-      <Button
-        onPress={() =>
-          setCountForDay(
-            date,
-            currentCount === DEFAULT_NO_DAY_VALUE ? 1 : currentCount + 1,
-          )
-        }
-      >
-        +
-      </Button>
+      <View style={styles.row}>
+        <Button
+          disabled={currentCount < 1}
+          onPress={() => {
+            setCountForDay(
+              date,
+              currentCount === DEFAULT_NO_DAY_VALUE ? 0 : currentCount - 1,
+            );
+          }}
+        >
+          -
+        </Button>
+        <Text>
+          {currentCount === DEFAULT_NO_DAY_VALUE ? '-' : currentCount}
+        </Text>
+        <Button
+          onPress={() =>
+            setCountForDay(
+              date,
+              currentCount === DEFAULT_NO_DAY_VALUE ? 0 : currentCount + 1,
+            )
+          }
+        >
+          +
+        </Button>
+      </View>
     </View>
   );
 }
@@ -66,16 +75,17 @@ export default function WeekScreen() {
   }, []);
 
   return (
-    <Layout>
+    <Layout style={styles.container}>
       <ScrollView>
         <View style={styles.titleContainer}>
           <Text category="h1">Welcome!</Text>
         </View>
 
-        <Card>
+        <View>
           <View style={styles.stepContainer}>
             <Text>
-              {currentWeekStart.getMonth() + 1}/{currentWeekStart.getDate()}
+              Week of {currentWeekStart.getMonth() + 1}/
+              {currentWeekStart.getDate()}
             </Text>
           </View>
           <View style={styles.stepContainer}>
@@ -83,16 +93,16 @@ export default function WeekScreen() {
               const day = new Date(
                 currentWeekStart.getTime() + ONE_DAY * index,
               );
-              return <WeekRow key={index} date={day} />;
+              return <WeekRow date={day} key={index} />;
             })}
           </View>
-        </Card>
+        </View>
 
-        <View>
-          <Button onPress={goToPrevWeek} size="md" appearance="filled">
+        <View style={styles.row}>
+          <Button appearance="outline" onPress={goToPrevWeek}>
             Previous Week
           </Button>
-          <Button onPress={goToNextWeek} size="md" appearance="solid">
+          <Button appearance="filled" onPress={goToNextWeek}>
             Next Week
           </Button>
         </View>
@@ -102,6 +112,11 @@ export default function WeekScreen() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -112,7 +127,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   row: {
+    alignItems: 'center',
     columnGap: 16,
     flexDirection: 'row',
+  },
+  dayRow: {
+    justifyContent: 'space-between',
   },
 });
