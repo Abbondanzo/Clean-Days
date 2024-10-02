@@ -1,22 +1,19 @@
-import { Link, Stack } from 'expo-router';
-import { StyleSheet } from 'react-native';
-
-import { Box } from '@/components/ui/box';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
+import { Layout, Text } from '@ui-kitten/components'
+import { Link, Stack } from 'expo-router'
+import { StyleSheet } from 'react-native'
 
 export default function NotFoundScreen() {
   return (
     <>
       <Stack.Screen options={{ title: 'Oops!' }} />
-      <Box style={styles.container}>
-        <Heading size="2xl">This screen doesn't exist.</Heading>
+      <Layout style={styles.container}>
+        <Text category="h2">This screen doesn't exist.</Text>
         <Link href="/" style={styles.link}>
           <Text>Go to home screen!</Text>
         </Link>
-      </Box>
+      </Layout>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -30,4 +27,4 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingVertical: 15,
   },
-});
+})
