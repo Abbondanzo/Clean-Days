@@ -1,1 +1,1 @@
-export const DEFAULT_NO_DAY_VALUE = -1
+export const DEFAULT_NO_DAY_VALUE = -1;

@@ -1,6 +1,6 @@
-import { Layout, Text } from '@ui-kitten/components'
-import { Link, Stack } from 'expo-router'
-import { StyleSheet } from 'react-native'
+import { Layout, Text } from '@ui-kitten/components';
+import { Link, Stack } from 'expo-router';
+import { StyleSheet } from 'react-native';
 
 export default function NotFoundScreen() {
   return (
@@ -13,7 +13,7 @@ export default function NotFoundScreen() {
         </Link>
       </Layout>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -27,4 +27,4 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingVertical: 15,
   },
-})
+});

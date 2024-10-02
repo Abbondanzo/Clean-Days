@@ -7,9 +7,8 @@ module.exports = {
       'error',
       {
         singleQuote: true,
-        semi: false,
       },
     ],
     'react/jsx-sort-props': 'error',
   },
-}
+};
