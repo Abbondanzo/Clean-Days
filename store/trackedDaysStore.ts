@@ -7,7 +7,11 @@ import {
   persist,
   StateStorage,
 } from 'zustand/middleware';
-import { DEFAULT_NO_DAY_VALUE } from '../constants/Days';
+import {
+  DEFAULT_NO_DAY_VALUE,
+  ONE_DAY_MS,
+  SEVEN_DAYS,
+} from '../constants/Days';
 
 type TrackedDays = {
   [year: string]: { [month: string]: number[] };
@@ -81,4 +85,11 @@ export const selectByDate = (date: Date) => (state: Store) => {
   return typeof currentDayValue === 'number'
     ? currentDayValue
     : DEFAULT_NO_DAY_VALUE;
+};
+
+export const selectByWeek = (weekStart: Date) => (state: Store) => {
+  return SEVEN_DAYS.map((_, index) => {
+    const date = new Date(weekStart.getTime() + ONE_DAY_MS * index);
+    return selectByDate(date)(state);
+  });
 };

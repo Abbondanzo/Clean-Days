@@ -1,8 +1,13 @@
 import { Button, Layout, Text } from '@ui-kitten/components';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { DEFAULT_NO_DAY_VALUE } from '../constants/Days';
-import { selectByDate, useTrackedDaysStore } from '../store/trackedDaysStore';
+import {
+  selectByDate,
+  selectByWeek,
+  useTrackedDaysStore,
+} from '../store/trackedDaysStore';
+import { Graph } from '../components/week/Graph';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
 const SEVEN_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
@@ -73,6 +78,7 @@ export default function WeekScreen() {
       (oldStart) => new Date(oldStart.getTime() + 7 * ONE_DAY),
     );
   }, []);
+  const days = useTrackedDaysStore(selectByWeek(currentWeekStart));
 
   return (
     <Layout style={styles.container}>
@@ -89,12 +95,16 @@ export default function WeekScreen() {
             </Text>
           </View>
           <View style={styles.stepContainer}>
-            {SEVEN_DAYS.map((_, index) => {
+            <Graph
+              days={days.map((day) => ({ value: day, target: 4 }))}
+              max={12}
+            />
+            {/* {SEVEN_DAYS.map((_, index) => {
               const day = new Date(
                 currentWeekStart.getTime() + ONE_DAY * index,
               );
               return <WeekRow date={day} key={index} />;
-            })}
+            })} */}
           </View>
         </View>
 
