@@ -7,11 +7,8 @@ import {
   persist,
   StateStorage,
 } from 'zustand/middleware';
-import {
-  DEFAULT_NO_DAY_VALUE,
-  ONE_DAY_MS,
-  SEVEN_DAYS,
-} from '../constants/Days';
+import { DEFAULT_NO_DAY_VALUE } from '../constants/Days';
+import { BasicDate } from '../types/BasicDate';
 
 type TrackedDays = {
   [year: string]: { [month: string]: number[] };
@@ -32,15 +29,11 @@ const storage: StateStorage = {
 
 interface Store {
   trackedDays: TrackedDays;
-  setCountForDay: (date: Date, count: number) => void;
+  setCountForDay: (date: BasicDate, count: number) => void;
 }
 
-const getEmptyMonthArray = (date: Date): number[] => {
-  const daysInMonth = new Date(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    0,
-  ).getDate();
+const getEmptyMonthArray = (date: BasicDate): number[] => {
+  const daysInMonth = new Date(date.year, date.month + 2, 0).getDate();
   return new Array(daysInMonth).fill(DEFAULT_NO_DAY_VALUE);
 };
 
@@ -52,13 +45,12 @@ export const useTrackedDaysStore = create<Store>()(
         setCountForDay: (date, count) => {
           set(
             produce((state: Store) => {
-              const curYear = state.trackedDays[date.getFullYear()] || {};
-              state.trackedDays[date.getFullYear()] = curYear;
-              const curMonth =
-                curYear[date.getMonth()] || getEmptyMonthArray(date);
-              curYear[date.getMonth()] = curMonth;
-              curMonth[date.getDate()] = count;
-              state.trackedDays[date.getFullYear()] = curYear;
+              const curYear = state.trackedDays[date.year] || {};
+              state.trackedDays[date.year] = curYear;
+              const curMonth = curYear[date.month] || getEmptyMonthArray(date);
+              curYear[date.month] = curMonth;
+              curMonth[date.day - 1] = count;
+              state.trackedDays[date.year] = curYear;
             }),
           );
         },
@@ -76,20 +68,17 @@ export const useTrackedDaysStore = create<Store>()(
   ),
 );
 
-export const selectByDate = (date: Date) => (state: Store) => {
-  const curYear = state.trackedDays[date.getFullYear()];
+const selectByDate = (date: BasicDate) => (state: Store) => {
+  const curYear = state.trackedDays[date.year];
   if (!curYear) return DEFAULT_NO_DAY_VALUE;
-  const curMonth = curYear[date.getMonth()];
+  const curMonth = curYear[date.month];
   if (!curMonth) return DEFAULT_NO_DAY_VALUE;
-  const currentDayValue = curMonth[date.getDate()];
+  const currentDayValue = curMonth[date.day - 1];
   return typeof currentDayValue === 'number'
     ? currentDayValue
     : DEFAULT_NO_DAY_VALUE;
 };
 
-export const selectByWeek = (weekStart: Date) => (state: Store) => {
-  return SEVEN_DAYS.map((_, index) => {
-    const date = new Date(weekStart.getTime() + ONE_DAY_MS * index);
-    return selectByDate(date)(state);
-  });
+export const useCountByDate = (date: BasicDate) => {
+  return useTrackedDaysStore(selectByDate(date));
 };
