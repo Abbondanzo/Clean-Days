@@ -32,8 +32,8 @@ export const DrinkCountEditor = ({ date }: Props) => {
   return (
     <View style={styles.container}>
       <Button
-        appearance="outline"
         accessoryLeft={MinusIcon}
+        appearance="outline"
         disabled={count <= 0}
         onPress={decrementCount}
         style={styles.button}
@@ -43,8 +43,8 @@ export const DrinkCountEditor = ({ date }: Props) => {
         <Text appearance="hint">/8</Text>
       </View>
       <Button
-        appearance="filled"
         accessoryLeft={PlusIcon}
+        appearance="filled"
         onPress={incrementCount}
         style={styles.button}
       />

@@ -44,10 +44,10 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
       <View style={styles.weekRow}>
         {dates.map((date, index) => (
           <WeekPickerRowItem
-            key={index}
             date={date}
-            selected={isEqual(date, selectedDate)}
+            key={index}
             onSelect={() => setSelectedDate(date)}
+            selected={isEqual(date, selectedDate)}
           />
         ))}
       </View>

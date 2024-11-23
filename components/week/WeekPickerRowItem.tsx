@@ -52,16 +52,16 @@ export const WeekPickerRowItem = ({ date, selected, onSelect }: Props) => {
       default:
         return { backgroundColor: DEFAULT_COLOR };
     }
-  }, [count, status]);
+  }, [status]);
   return (
     <View style={styles.container}>
       <Text appearance={selected ? 'default' : 'hint'} style={styles.dateText}>
         {getDateStringFromBasicDate(date, 'short')}
       </Text>
       <Pressable
-        style={[styles.outerCountContainer, outerStyle]}
-        onPress={onSelect}
         accessibilityState={{ selected }}
+        onPress={onSelect}
+        style={[styles.outerCountContainer, outerStyle]}
       >
         <View
           style={[styles.countContainer, !selected ? statusStyle : undefined]}

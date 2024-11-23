@@ -5,22 +5,15 @@ import { WeekPicker } from '../components/week/WeekPicker';
 import { getToday } from '../utils/basicDateUtils';
 import { DrinkCountEditor } from '../components/count/DrinkCountEditor';
 
-const ONE_DAY = 1000 * 60 * 60 * 24;
-const SEVEN_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
-
-const generateWeek = (): Date => {
-  // Start of week is Monday
-  const today = new Date();
-  const daysUntilStart = (today.getDay() + 6) % 7;
-  return new Date(today.getTime() - daysUntilStart * ONE_DAY);
-};
-
 export const Home = () => {
   const [selectedDate, setSelectedDate] = useState(() => getToday());
 
   return (
     <Layout style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        style={styles.container}
+      >
         <View style={styles.scrollViewChild}>
           <View style={styles.titleContainer}>
             <Text category="h1">Welcome!</Text>
@@ -41,9 +34,14 @@ export const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     width: '100%',
+    height: '100%',
+  },
+  contentContainer: {
+    padding: 8,
+    backgroundColor: 'red',
   },
   titleContainer: {
     flexDirection: 'row',

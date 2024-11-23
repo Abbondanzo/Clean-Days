@@ -1,7 +1,6 @@
 import { BasicDate } from '../types/BasicDate';
 
 const ONE_DAY = 1000 * 60 * 60 * 24;
-const SEVEN_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
 const LONG_FORMATTER = new Intl.DateTimeFormat('en-US', { weekday: 'long' });
 const SHORT_FORMATTER = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
 const NARROW_FORMATTER = new Intl.DateTimeFormat('en-US', {
