@@ -38,7 +38,7 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
   );
   return (
     <View>
-      <Text style={styles.titleText}>
+      <Text category="label" style={styles.titleText}>
         Week of {currentWeek.month}/{currentWeek.day}
       </Text>
       <View style={styles.weekRow}>
