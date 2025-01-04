@@ -1,13 +1,20 @@
+import { Layout } from '@ui-kitten/components';
+import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { ThemeContext } from '../context/ThemeContext';
 import { Home } from '../screens/Home';
 import { Statistics } from '../screens/Statistics';
 import { ColorSchemeToggle } from './ColorSchemeToggle';
 import { StackContainer } from './StackContainer';
-import { Layout } from '@ui-kitten/components';
 
 export const Root = () => {
+  const { theme } = useContext(ThemeContext);
+  const backgroundTheme =
+    theme === 'light'
+      ? { backgroundColor: '#c5c8ce' }
+      : { backgroundColor: '#0b0e17' };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, backgroundTheme]}>
       <Layout level="4" style={styles.optionsContainer}>
         <View style={styles.optionsContainerContents}>
           <ColorSchemeToggle />
