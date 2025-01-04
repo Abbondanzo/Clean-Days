@@ -77,3 +77,13 @@ export const isEqual = (dateA: BasicDate, dateB: BasicDate): boolean => {
     dateA.day === dateB.day
   );
 };
+
+export const isAfterToday = (date: BasicDate): boolean => {
+  const today = getToday();
+  return (
+    date.year > today.year ||
+    (date.year === today.year &&
+      (date.month > today.month ||
+        (date.month === today.month && date.day > today.day)))
+  );
+};

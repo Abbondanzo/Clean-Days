@@ -6,6 +6,7 @@ import {
   addDaysToDate,
   getStartOfWeek,
   getToday,
+  isAfterToday,
   isEqual,
 } from '../../utils/basicDateUtils';
 import { Widget } from '../theme/Widget';
@@ -59,6 +60,11 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
     return str;
   }, [selectedWeek]);
 
+  const disableNextWeek = useMemo(
+    () => isAfterToday(addDaysToDate(selectedWeek, 7)),
+    [selectedWeek],
+  );
+
   return (
     <Widget title={title}>
       <View style={styles.weekRow}>
@@ -81,6 +87,7 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
         </Button>
         <Button
           appearance="filled"
+          disabled={disableNextWeek}
           onPress={goToNextWeek}
           style={styles.weekButton}
         >

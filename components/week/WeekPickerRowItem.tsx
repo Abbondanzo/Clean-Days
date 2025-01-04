@@ -1,11 +1,14 @@
 import { Text } from '@ui-kitten/components';
-import { View, StyleSheet, ViewStyle, Pressable } from 'react-native';
+import { useMemo } from 'react';
+import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
 import { useCountByDate } from '../../store/trackedDaysStore';
 import { BasicDate } from '../../types/BasicDate';
-import { getDateStringFromBasicDate } from '../../utils/basicDateUtils';
-import { DrinkCount } from '../count/DrinkCount';
-import { useMemo } from 'react';
+import {
+  getDateStringFromBasicDate,
+  isAfterToday,
+} from '../../utils/basicDateUtils';
 import { getStatusFromCount } from '../../utils/countUtils';
+import { DrinkCount } from '../count/DrinkCount';
 
 interface Props {
   date: BasicDate;
@@ -53,13 +56,20 @@ export const WeekPickerRowItem = ({ date, selected, onSelect }: Props) => {
         return { backgroundColor: DEFAULT_COLOR };
     }
   }, [status]);
+  const disabled = useMemo(() => isAfterToday(date), [date]);
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        disabled ? styles.disabledPressable : undefined,
+      ]}
+    >
       <Text appearance={selected ? 'default' : 'hint'} style={styles.dateText}>
         {getDateStringFromBasicDate(date, 'short')}
       </Text>
       <Pressable
         accessibilityState={{ selected }}
+        disabled={disabled}
         onPress={onSelect}
         style={[styles.outerCountContainer, outerStyle]}
       >
@@ -99,6 +109,9 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 14,
+  },
+  disabledPressable: {
+    opacity: 0.3,
   },
   outerCountContainer: {
     borderColor: DEFAULT_COLOR,
