@@ -6,6 +6,15 @@ const SHORT_FORMATTER = new Intl.DateTimeFormat('en-US', { weekday: 'short' });
 const NARROW_FORMATTER = new Intl.DateTimeFormat('en-US', {
   weekday: 'narrow',
 });
+const MONTH_FORMATTER = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+});
+const MONTH_FORMATTER_WITH_YEAR = new Intl.DateTimeFormat('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+});
 
 const basicDateToDate = (date: BasicDate): Date => {
   return new Date(date.year, date.month - 1, date.day);
@@ -43,7 +52,7 @@ export const addDaysToDate = (date: BasicDate, days: number): BasicDate => {
 
 export const getDateStringFromBasicDate = (
   date: BasicDate,
-  format: 'long' | 'short' | 'narrow',
+  format: 'long' | 'short' | 'narrow' | 'month',
 ): string => {
   switch (format) {
     case 'long':
@@ -52,6 +61,12 @@ export const getDateStringFromBasicDate = (
       return SHORT_FORMATTER.format(basicDateToDate(date));
     case 'narrow':
       return NARROW_FORMATTER.format(basicDateToDate(date));
+    case 'month':
+      if (date.year === new Date().getFullYear()) {
+        return MONTH_FORMATTER.format(basicDateToDate(date));
+      } else {
+        return MONTH_FORMATTER_WITH_YEAR.format(basicDateToDate(date));
+      }
   }
 };
 
