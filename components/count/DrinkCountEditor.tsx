@@ -6,7 +6,9 @@ import {
   useTrackedDaysStore,
 } from '../../store/trackedDaysStore';
 import { DrinkCount } from './DrinkCount';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import { Widget } from '../theme/Widget';
+import { getDateStringFromBasicDate } from '../../utils/basicDateUtils';
 
 interface Props {
   date: BasicDate;
@@ -28,27 +30,33 @@ export const DrinkCountEditor = ({ date }: Props) => {
     () => setCountForDay(date, count + 1),
     [date, count, setCountForDay],
   );
+  const title = useMemo(
+    () => `Drinks on ${getDateStringFromBasicDate(date, 'month')}`,
+    [date],
+  );
 
   return (
-    <View style={styles.container}>
-      <Button
-        accessoryLeft={MinusIcon}
-        appearance="outline"
-        disabled={count <= 0}
-        onPress={decrementCount}
-        style={styles.button}
-      />
-      <View style={styles.drinkCountContainer}>
-        <DrinkCount category="h1" date={date} style={styles.drinkCountText} />
-        <Text appearance="hint">/8</Text>
+    <Widget title={title}>
+      <View style={styles.container}>
+        <Button
+          accessoryLeft={MinusIcon}
+          appearance="outline"
+          disabled={count <= 0}
+          onPress={decrementCount}
+          style={styles.button}
+        />
+        <View style={styles.drinkCountContainer}>
+          <DrinkCount category="h1" date={date} style={styles.drinkCountText} />
+          <Text appearance="hint">/8</Text>
+        </View>
+        <Button
+          accessoryLeft={PlusIcon}
+          appearance="filled"
+          onPress={incrementCount}
+          style={styles.button}
+        />
       </View>
-      <Button
-        accessoryLeft={PlusIcon}
-        appearance="filled"
-        onPress={incrementCount}
-        style={styles.button}
-      />
-    </View>
+    </Widget>
   );
 };
 

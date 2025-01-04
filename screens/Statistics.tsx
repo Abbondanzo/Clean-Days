@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 
 export const Statistics = () => {
   return (
-    <Layout style={styles.container}>
+    <Layout level="2" style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         style={styles.container}
@@ -21,8 +21,6 @@ export const Statistics = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     width: '100%',
     height: '100%',
   },

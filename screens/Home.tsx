@@ -1,15 +1,15 @@
 import { Layout, Text } from '@ui-kitten/components';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { DrinkCountEditor } from '../components/count/DrinkCountEditor';
 import { WeekPicker } from '../components/week/WeekPicker';
 import { getToday } from '../utils/basicDateUtils';
-import { DrinkCountEditor } from '../components/count/DrinkCountEditor';
 
 export const Home = () => {
   const [selectedDate, setSelectedDate] = useState(() => getToday());
 
   return (
-    <Layout style={styles.container}>
+    <Layout level="2" style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         style={styles.container}
@@ -52,5 +52,10 @@ const styles = StyleSheet.create({
   },
   scrollViewChild: {
     rowGap: 16,
+  },
+  widget: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    padding: 16,
   },
 });

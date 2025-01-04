@@ -8,6 +8,7 @@ import {
   isEqual,
 } from '../../utils/basicDateUtils';
 import { WeekPickerRowItem } from './WeekPickerRowItem';
+import { Widget } from '../theme/Widget';
 
 const buildCurrentWeekFromStart = (start: BasicDate): BasicDate[] => {
   return Array(7)
@@ -36,11 +37,9 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
     () => buildCurrentWeekFromStart(currentWeek),
     [currentWeek],
   );
+  const title = `Week of ${currentWeek.month}/${currentWeek.day}`;
   return (
-    <View>
-      <Text category="label" style={styles.titleText}>
-        Week of {currentWeek.month}/{currentWeek.day}
-      </Text>
+    <Widget title={title}>
       <View style={styles.weekRow}>
         {dates.map((date, index) => (
           <WeekPickerRowItem
@@ -67,7 +66,7 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
           Next week
         </Button>
       </View>
-    </View>
+    </Widget>
   );
 };
 
@@ -82,7 +81,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   titleText: {
     paddingBottom: 16,
     fontSize: 14,
