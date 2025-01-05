@@ -109,8 +109,6 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderWidth: 2,
     borderRadius: 8,
-    width: '100%',
-    minWidth: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -129,5 +127,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 12,
     padding: 2,
+    width: '100%',
   },
 });

@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   weekRow: {
     alignItems: 'center',
-    columnGap: 4,
+    gap: 4,
     flexDirection: 'row',
     flex: 1,
   },
