@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ThemeContext } from '../context/ThemeContext';
 import { Home } from '../screens/Home';
+import { Settings } from '../screens/Settings';
 import { Statistics } from '../screens/Statistics';
 import { ColorSchemeToggle } from './ColorSchemeToggle';
 import { StackContainer } from './StackContainer';
@@ -23,6 +24,7 @@ export const Root = () => {
       <ScrollView contentContainerStyle={styles.contentContainer} horizontal>
         <StackContainer component={<Home />} label="Home" />
         <StackContainer component={<Statistics />} label="Stats" />
+        <StackContainer component={<Settings />} label="Settings" />
       </ScrollView>
     </View>
   );

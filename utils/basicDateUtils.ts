@@ -32,10 +32,12 @@ export const getToday = (): BasicDate => {
   return dateToBasicDate(new Date());
 };
 
-export const getStartOfWeek = (date: BasicDate): BasicDate => {
-  // Start of week is Monday
+export const getStartOfWeek = (
+  date: BasicDate,
+  startOfWeek: number,
+): BasicDate => {
   const today = basicDateToDate(date);
-  const daysUntilStart = (today.getDay() + 6) % 7;
+  const daysUntilStart = (today.getDay() + 7 - startOfWeek) % 7;
   const weekStartDate = new Date(today.getTime() - daysUntilStart * ONE_DAY);
   return {
     year: weekStartDate.getFullYear(),

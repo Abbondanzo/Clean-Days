@@ -1,12 +1,12 @@
 import { Button } from '@ui-kitten/components';
 import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useSettingsStore } from '../../store/settingsStore';
 import { BasicDate } from '../../types/BasicDate';
 import {
   addDaysToDate,
   getStartOfWeek,
   getToday,
-  isAfterToday,
   isEqual,
 } from '../../utils/basicDateUtils';
 import { Widget } from '../theme/Widget';
@@ -20,8 +20,8 @@ const buildCurrentWeekFromStart = (start: BasicDate): BasicDate[] => {
     });
 };
 
-const getCurrentWeek = (): BasicDate => {
-  return getStartOfWeek(getToday());
+const getCurrentWeek = (startOfWeek: number): BasicDate => {
+  return getStartOfWeek(getToday(), startOfWeek);
 };
 
 interface Props {
@@ -30,40 +30,36 @@ interface Props {
 }
 
 export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
-  const [selectedWeek, setSelectedWeek] = useState(() =>
-    getStartOfWeek(selectedDate),
-  );
+  const { startOfWeek } = useSettingsStore();
+  const [weekOffset, setWeekOffset] = useState(0);
+  const selectedWeekWithOffset = useMemo(() => {
+    const curWeek = getCurrentWeek(startOfWeek);
+    return addDaysToDate(curWeek, weekOffset * 7);
+  }, [startOfWeek, weekOffset]);
+
   const dates = useMemo(
-    () => buildCurrentWeekFromStart(selectedWeek),
-    [selectedWeek],
+    () => buildCurrentWeekFromStart(selectedWeekWithOffset),
+    [selectedWeekWithOffset],
   );
 
   const goToPrevWeek = useCallback(() => {
-    return setSelectedWeek((oldStart) => addDaysToDate(oldStart, -7));
+    setWeekOffset((oldOffset) => oldOffset - 1);
   }, []);
   const goToNextWeek = useCallback(() => {
-    return setSelectedWeek((oldStart) => addDaysToDate(oldStart, 7));
+    setWeekOffset((oldOffset) => oldOffset + 1);
   }, []);
-
-  const selectedCurrentWeek = useMemo(() => {
-    return isEqual(selectedWeek, getCurrentWeek());
-  }, [selectedWeek]);
   const goToCurrentWeek = useCallback(() => {
-    setSelectedWeek(getCurrentWeek());
+    setWeekOffset(0);
   }, []);
+  const isCurrentWeek = useMemo(() => weekOffset === 0, [weekOffset]);
 
   const title = useMemo(() => {
-    let str = `Week of ${selectedWeek.month}/${selectedWeek.day}`;
-    if (new Date().getFullYear() !== selectedWeek.year) {
-      str += `/${selectedWeek.year}`;
+    let str = `Week of ${selectedWeekWithOffset.month}/${selectedWeekWithOffset.day}`;
+    if (new Date().getFullYear() !== selectedWeekWithOffset.year) {
+      str += `/${selectedWeekWithOffset.year}`;
     }
     return str;
-  }, [selectedWeek]);
-
-  const disableNextWeek = useMemo(
-    () => isAfterToday(addDaysToDate(selectedWeek, 7)),
-    [selectedWeek],
-  );
+  }, [selectedWeekWithOffset]);
 
   return (
     <Widget title={title}>
@@ -87,7 +83,7 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
         </Button>
         <Button
           appearance="filled"
-          disabled={disableNextWeek}
+          disabled={isCurrentWeek}
           onPress={goToNextWeek}
           style={styles.weekButton}
         >
@@ -95,7 +91,7 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
         </Button>
       </View>
       <View style={styles.buttonRow}>
-        {!selectedCurrentWeek && (
+        {!isCurrentWeek && (
           <Button
             appearance="ghost"
             onPress={goToCurrentWeek}
