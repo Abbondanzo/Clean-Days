@@ -9,5 +9,11 @@ module.exports = {
       },
     ],
     'react/jsx-sort-props': 'error',
+    'react/sort-prop-types': [
+      'error',
+      {
+        requiredFirst: true,
+      },
+    ],
   },
 };

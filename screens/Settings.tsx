@@ -1,7 +1,9 @@
 import { Layout, Text } from '@ui-kitten/components';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { DailyTargetCountWidget } from '../components/settings/DailyTargetCountWidget';
+import { StartOfWeekWidget } from '../components/settings/StartOfWeekWidget';
 
-export const Statistics = () => {
+export const Settings = () => {
   return (
     <Layout level="2" style={styles.container}>
       <ScrollView
@@ -10,8 +12,12 @@ export const Statistics = () => {
       >
         <View style={styles.scrollViewChild}>
           <View style={styles.titleContainer}>
-            <Text category="h1">Stats!</Text>
+            <Text category="h1">Settings</Text>
           </View>
+
+          <StartOfWeekWidget />
+
+          <DailyTargetCountWidget />
         </View>
       </ScrollView>
     </Layout>

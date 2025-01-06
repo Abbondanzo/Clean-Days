@@ -26,7 +26,7 @@ export const ThemeProvider = ({ children }: Props) => {
       value={{
         theme,
         toggleTheme: () => {
-          setOverride((prev) => (prev !== 'dark' ? 'dark' : 'light'));
+          setOverride(theme === 'light' ? 'dark' : 'light');
         },
       }}
     >

@@ -1,30 +1,14 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { produce } from 'immer';
 import { create } from 'zustand';
-import {
-  createJSONStorage,
-  devtools,
-  persist,
-  StateStorage,
-} from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { DEFAULT_NO_DAY_VALUE } from '../constants/Days';
 import { BasicDate } from '../types/BasicDate';
+import { getDayFromDate } from '../utils/basicDateUtils';
+import { useSettingsStore } from './settingsStore';
+import { storage } from './storage';
 
 type TrackedDays = {
   [year: string]: { [month: string]: number[] };
-};
-
-// Custom storage object
-const storage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    return AsyncStorage.getItem(name);
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    await AsyncStorage.setItem(name, value);
-  },
-  removeItem: async (name: string): Promise<void> => {
-    await AsyncStorage.removeItem(name);
-  },
 };
 
 interface Store {
@@ -81,4 +65,10 @@ const selectByDate = (date: BasicDate) => (state: Store) => {
 
 export const useCountByDate = (date: BasicDate) => {
   return useTrackedDaysStore(selectByDate(date));
+};
+
+export const useTargetByDate = (date: BasicDate) => {
+  const { targetDrinks } = useSettingsStore();
+  const dayIndex = getDayFromDate(date);
+  return targetDrinks[dayIndex];
 };
