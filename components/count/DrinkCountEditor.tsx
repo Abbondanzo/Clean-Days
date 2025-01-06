@@ -1,14 +1,15 @@
 import { Button, Icon, IconProps, Text } from '@ui-kitten/components';
-import { View, StyleSheet } from 'react-native';
-import { BasicDate } from '../../types/BasicDate';
+import { useCallback, useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 import {
   useCountByDate,
+  useTargetByDate,
   useTrackedDaysStore,
 } from '../../store/trackedDaysStore';
-import { DrinkCount } from './DrinkCount';
-import { useCallback, useMemo } from 'react';
-import { Widget } from '../theme/Widget';
+import { BasicDate } from '../../types/BasicDate';
 import { getDateStringFromBasicDate } from '../../utils/basicDateUtils';
+import { Widget } from '../theme/Widget';
+import { DrinkCount } from './DrinkCount';
 
 interface Props {
   date: BasicDate;
@@ -21,6 +22,8 @@ const PlusIcon = (props: IconProps) => <Icon {...props} name="plus-outline" />;
 
 export const DrinkCountEditor = ({ date }: Props) => {
   const count = useCountByDate(date);
+  const target = useTargetByDate(date);
+
   const { setCountForDay } = useTrackedDaysStore();
   const decrementCount = useCallback(
     () => setCountForDay(date, count - 1),
@@ -47,7 +50,7 @@ export const DrinkCountEditor = ({ date }: Props) => {
         />
         <View style={styles.drinkCountContainer}>
           <DrinkCount category="h1" date={date} style={styles.drinkCountText} />
-          <Text appearance="hint">/8</Text>
+          <Text appearance="hint">/{target}</Text>
         </View>
         <Button
           accessoryLeft={PlusIcon}
@@ -81,6 +84,6 @@ const styles = StyleSheet.create({
     minHeight: 120,
   },
   drinkCountText: {
-    fontSize: 48,
+    fontSize: 64,
   },
 });

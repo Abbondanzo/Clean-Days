@@ -1,6 +1,5 @@
 import { IndexPath, Select, SelectItem, Text } from '@ui-kitten/components';
 import { useMemo } from 'react';
-import { StyleSheet } from 'react-native';
 import { useSettingsStore } from '../../store/settingsStore';
 import { Widget } from '../theme/Widget';
 
@@ -38,8 +37,8 @@ export const StartOfWeekWidget = () => {
   return (
     <Widget title="Start of Week">
       <Select
-        label={() => (
-          <Text style={styles.text}>Choose the first day of the week</Text>
+        label={(props) => (
+          <Text {...props}>Choose the first day of the week</Text>
         )}
         onSelect={onSelect}
         selectedIndex={selectedIndex}
@@ -52,9 +51,3 @@ export const StartOfWeekWidget = () => {
     </Widget>
   );
 };
-
-const styles = StyleSheet.create({
-  text: {
-    marginBottom: 4,
-  },
-});

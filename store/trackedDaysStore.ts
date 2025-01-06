@@ -3,6 +3,8 @@ import { create } from 'zustand';
 import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 import { DEFAULT_NO_DAY_VALUE } from '../constants/Days';
 import { BasicDate } from '../types/BasicDate';
+import { getDayFromDate } from '../utils/basicDateUtils';
+import { useSettingsStore } from './settingsStore';
 import { storage } from './storage';
 
 type TrackedDays = {
@@ -63,4 +65,10 @@ const selectByDate = (date: BasicDate) => (state: Store) => {
 
 export const useCountByDate = (date: BasicDate) => {
   return useTrackedDaysStore(selectByDate(date));
+};
+
+export const useTargetByDate = (date: BasicDate) => {
+  const { targetDrinks } = useSettingsStore();
+  const dayIndex = getDayFromDate(date);
+  return targetDrinks[dayIndex];
 };

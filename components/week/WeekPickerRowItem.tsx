@@ -1,7 +1,7 @@
 import { Text, useTheme } from '@ui-kitten/components';
 import { useMemo } from 'react';
 import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
-import { useCountByDate } from '../../store/trackedDaysStore';
+import { useCountByDate, useTargetByDate } from '../../store/trackedDaysStore';
 import { BasicDate } from '../../types/BasicDate';
 import {
   getDateStringFromBasicDate,
@@ -22,9 +22,12 @@ const GOOD_COLOR = '#60d013';
 
 export const WeekPickerRowItem = ({ date, selected, onSelect }: Props) => {
   const count = useCountByDate(date);
-  // TODO: Store max in a weekly constant
+  const target = useTargetByDate(date);
   const theme = useTheme();
-  const status = useMemo(() => getStatusFromCount(count, 8), [count]);
+  const status = useMemo(
+    () => getStatusFromCount(count, target),
+    [count, target],
+  );
   const outerStyle = useMemo((): ViewStyle => {
     if (!selected) {
       return {

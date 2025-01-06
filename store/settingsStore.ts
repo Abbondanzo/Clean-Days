@@ -8,6 +8,8 @@ const DEFAULT_DAY_OF_WEEK = 1; // Monday
 interface Store {
   startOfWeek: number;
   setStartOfWeek: (startOfWeek: number) => void;
+  targetDrinks: number[];
+  setTargetDrinks: (targetDrinks: number[]) => void;
 }
 
 export const useSettingsStore = create<Store>()(
@@ -19,6 +21,14 @@ export const useSettingsStore = create<Store>()(
           set(
             produce((state: Store) => {
               state.startOfWeek = newDayOfWeek;
+            }),
+          );
+        },
+        targetDrinks: [0, 0, 0, 0, 0, 0, 0],
+        setTargetDrinks: (newTargetDrinks: number[]) => {
+          set(
+            produce((state: Store) => {
+              state.targetDrinks = newTargetDrinks;
             }),
           );
         },

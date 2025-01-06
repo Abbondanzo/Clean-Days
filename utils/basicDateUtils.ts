@@ -72,6 +72,10 @@ export const getDateStringFromBasicDate = (
   }
 };
 
+export const getDayFromDate = (date: BasicDate): number => {
+  return basicDateToDate(date).getDay();
+};
+
 export const isEqual = (dateA: BasicDate, dateB: BasicDate): boolean => {
   return (
     dateA.year === dateB.year &&
