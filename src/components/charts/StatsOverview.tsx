@@ -5,6 +5,7 @@ import type { BasicDate } from '../../types/BasicDate';
 import { getDayFromDate } from '../../utils/basicDateUtils';
 import { generateLast30DaysData } from '../../utils/chartUtils';
 import { Widget } from '../theme/Widget';
+import './charts.css';
 
 export const StatsOverview = () => {
   const trackedDays = useTrackedDaysStore(state => state.trackedDays);
@@ -65,132 +66,62 @@ export const StatsOverview = () => {
   }, [trackedDays, targetDrinks]);
 
   const getPercentageColor = (percentage: number) => {
-    if (percentage >= 100) return '#51cf66';
-    if (percentage >= 80) return '#ffd43b';
-    return '#ff6b6b';
+    if (percentage >= 100) return 'var(--color-success)';
+    if (percentage >= 80) return 'var(--color-warning)';
+    return 'var(--color-error)';
   };
 
   return (
     <Widget title="30-Day Summary">
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '16px',
-        }}
-      >
-        <div style={{ textAlign: 'center' }}>
-          <div
-            style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              color: 'var(--text-primary)',
-            }}
-          >
-            {stats.totalCount}
-          </div>
-          <div
-            style={{
-              fontSize: '12px',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            Total Drinks
-          </div>
+      <div className="stats-grid">
+        <div className="stats-item">
+          <div className="stats-value">{stats.totalCount}</div>
+          <div className="stats-label">Total Drinks</div>
         </div>
 
-        <div style={{ textAlign: 'center' }}>
-          <div
-            style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              color: 'var(--text-primary)',
-            }}
-          >
-            {stats.averageDaily}
-          </div>
-          <div
-            style={{
-              fontSize: '12px',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            Daily Average
-          </div>
+        <div className="stats-item">
+          <div className="stats-value">{stats.averageDaily}</div>
+          <div className="stats-label">Daily Average</div>
         </div>
 
-        <div style={{ textAlign: 'center' }}>
+        <div className="stats-item">
           <div
-            style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              color: getPercentageColor(stats.successRate),
-            }}
+            className="stats-value"
+            style={{ color: getPercentageColor(stats.successRate) }}
           >
             {stats.successRate}%
           </div>
-          <div
-            style={{
-              fontSize: '12px',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            Success Rate
-          </div>
+          <div className="stats-label">Success Rate</div>
         </div>
 
-        <div style={{ textAlign: 'center' }}>
+        <div className="stats-item">
           <div
+            className="stats-value"
             style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
               color:
-                stats.currentStreak > 0 ? '#51cf66' : 'var(--text-primary)',
+                stats.currentStreak > 0
+                  ? 'var(--color-success)'
+                  : 'var(--text-primary)',
             }}
           >
             {stats.currentStreak}
           </div>
-          <div
-            style={{
-              fontSize: '12px',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            Dry Streak
-          </div>
+          <div className="stats-label">Dry Streak</div>
         </div>
       </div>
 
-      <div
-        style={{
-          marginTop: '16px',
-          padding: '12px',
-          backgroundColor: 'var(--bg-tertiary)',
-          borderRadius: '8px',
-          fontSize: '14px',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div className="stats-summary">
+        <div className="stats-summary-row">
           <span>Successful Days:</span>
-          <span style={{ fontWeight: 'bold' }}>
+          <span className="stats-summary-value">
             {stats.successfulDays}/{stats.daysWithData}
           </span>
         </div>
-        <div
-          style={{
-            marginTop: '4px',
-            height: '4px',
-            backgroundColor: 'var(--border-color)',
-            borderRadius: '2px',
-            overflow: 'hidden',
-          }}
-        >
+        <div className="stats-progress-bar">
           <div
+            className="stats-progress-fill"
             style={{
-              height: '100%',
               width: `${stats.daysWithData > 0 ? (stats.successfulDays / stats.daysWithData) * 100 : 0}%`,
-              backgroundColor: '#51cf66',
-              borderRadius: '2px',
             }}
           />
         </div>

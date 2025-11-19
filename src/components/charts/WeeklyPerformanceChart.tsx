@@ -9,6 +9,7 @@ import {
   getWeeklySummary,
 } from '../../utils/chartUtils';
 import { Widget } from '../theme/Widget';
+import './charts.css';
 
 export const WeeklyPerformanceChart = () => {
   const trackedDays = useTrackedDaysStore(state => state.trackedDays);
@@ -51,14 +52,14 @@ export const WeeklyPerformanceChart = () => {
   }, [trackedDays, targetDrinks, startOfWeek]);
 
   const getBarColor = (percentage: number) => {
-    if (percentage >= 100) return '#51cf66'; // Green for meeting/exceeding target
-    if (percentage >= 80) return '#ffd43b'; // Yellow for close to target
-    return '#ff6b6b'; // Red for below target
+    if (percentage >= 100) return 'var(--color-success)'; // Green for meeting/exceeding target
+    if (percentage >= 80) return 'var(--color-warning)'; // Yellow for close to target
+    return 'var(--color-error)'; // Red for below target
   };
 
   return (
     <Widget title="Weekly Performance">
-      <div style={{ width: '100%' }}>
+      <div className="weekly-chart-container">
         <VictoryChart
           theme={VictoryTheme.material}
           width={350}
@@ -73,7 +74,7 @@ export const WeeklyPerformanceChart = () => {
               tickLabels: {
                 fontSize: 12,
                 fill: 'var(--text-secondary)',
-                fontFamily: "'Space Mono', 'Courier New', monospace",
+                fontFamily: 'var(--font-family)',
               },
               axis: { stroke: 'var(--border-color)' },
               grid: { stroke: 'var(--border-color)', strokeOpacity: 0.3 },
@@ -86,7 +87,7 @@ export const WeeklyPerformanceChart = () => {
               tickLabels: {
                 fontSize: 12,
                 fill: 'var(--text-secondary)',
-                fontFamily: "'Space Mono', 'Courier New', monospace",
+                fontFamily: 'var(--font-family)',
               },
             }}
           />
@@ -106,20 +107,13 @@ export const WeeklyPerformanceChart = () => {
           />
         </VictoryChart>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(28px, 1fr))',
-            gap: '8px',
-            marginTop: '4px',
-            fontSize: '11px',
-            textAlign: 'center',
-            fontFamily: "'Space Mono', 'Courier New', monospace",
-          }}
-        >
+        <div className="weekly-chart-weeks-list">
           {chartData.map((week, index) => (
-            <div key={index} style={{ color: 'var(--text-secondary)' }}>
-              <div style={{ fontWeight: 'bold', color: getBarColor(week.y) }}>
+            <div key={index} className="weekly-chart-week-item">
+              <div
+                className="weekly-chart-week-percentage"
+                style={{ color: getBarColor(week.y) }}
+              >
                 {week.y}%
               </div>
               <div>{week.actualCount.toFixed(1)} avg</div>
@@ -127,44 +121,17 @@ export const WeeklyPerformanceChart = () => {
           ))}
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '16px',
-            marginTop: '6px',
-            fontSize: '12px',
-            fontFamily: "'Space Mono', 'Courier New', monospace",
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div
-              style={{
-                width: '12px',
-                height: '12px',
-                backgroundColor: '#51cf66',
-              }}
-            />
+        <div className="weekly-chart-legend">
+          <div className="weekly-chart-legend-item">
+            <div className="weekly-chart-legend-color weekly-chart-legend-color--excellent" />
             <span>≥100%</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div
-              style={{
-                width: '12px',
-                height: '12px',
-                backgroundColor: '#ffd43b',
-              }}
-            />
+          <div className="weekly-chart-legend-item">
+            <div className="weekly-chart-legend-color weekly-chart-legend-color--good" />
             <span>80-99%</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div
-              style={{
-                width: '12px',
-                height: '12px',
-                backgroundColor: '#ff6b6b',
-              }}
-            />
+          <div className="weekly-chart-legend-item">
+            <div className="weekly-chart-legend-color weekly-chart-legend-color--needs-improvement" />
             <span>&lt;80%</span>
           </div>
         </div>

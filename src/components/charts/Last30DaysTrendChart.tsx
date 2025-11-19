@@ -17,6 +17,7 @@ import {
   generateLast30DaysData,
 } from '../../utils/chartUtils';
 import { Widget } from '../theme/Widget';
+import './charts.css';
 
 export const Last30DaysTrendChart = () => {
   const trackedDays = useTrackedDaysStore(state => state.trackedDays);
@@ -39,23 +40,29 @@ export const Last30DaysTrendChart = () => {
 
     const dailyData = generateLast30DaysData(getCountByDate, getTargetByDate);
 
-    // Only include days that have been set (count >= 0)
-    const setDaysData = dailyData.filter(day => day.count >= 0);
-
-    const countData: ChartDataPoint[] = setDaysData.map((day, index) => ({
+    // Include all 30 days, but use null for unset days to show gaps in chart
+    const countData: ChartDataPoint[] = dailyData.map((day, index) => ({
       x: index + 1,
-      y: day.count,
+      y: day.count >= 0 ? day.count : null, // null creates gaps in Victory charts
       date: day.date,
     }));
 
-    const targetData: ChartDataPoint[] = setDaysData.map((day, index) => ({
+    const targetData: ChartDataPoint[] = dailyData.map((day, index) => ({
       x: index + 1,
       y: day.target,
       date: day.date,
     }));
 
-    const movingAvg = calculateMovingAverage(countData, 7);
-    const trendLine = calculateTrendLine(countData);
+    // For moving average and trend, only use days with actual values
+    const setDaysData = dailyData.filter(day => day.count >= 0);
+    const setDaysCountData: ChartDataPoint[] = setDaysData.map(day => ({
+      x: dailyData.findIndex(d => d.date === day.date) + 1, // Use original x position
+      y: day.count,
+      date: day.date,
+    }));
+
+    const movingAvg = calculateMovingAverage(setDaysCountData, 7);
+    const trendLine = calculateTrendLine(setDaysCountData);
 
     return {
       actual: countData,
@@ -67,7 +74,7 @@ export const Last30DaysTrendChart = () => {
 
   return (
     <Widget title="Last 30 Days Trend">
-      <div style={{ width: '100%' }}>
+      <div className="trend-chart-container">
         <VictoryChart
           theme={VictoryTheme.material}
           width={350}
@@ -82,7 +89,7 @@ export const Last30DaysTrendChart = () => {
               tickLabels: {
                 fontSize: 12,
                 fill: 'var(--text-secondary)',
-                fontFamily: "'Space Mono', 'Courier New', monospace",
+                fontFamily: 'var(--font-family)',
               },
               axis: { stroke: 'var(--border-color)' },
               grid: { stroke: 'var(--border-color)', strokeOpacity: 0.3 },
@@ -95,7 +102,7 @@ export const Last30DaysTrendChart = () => {
               tickLabels: {
                 fontSize: 10,
                 fill: 'var(--text-secondary)',
-                fontFamily: "'Space Mono', 'Courier New', monospace",
+                fontFamily: 'var(--font-family)',
               },
             }}
           />
@@ -131,7 +138,7 @@ export const Last30DaysTrendChart = () => {
             data={chartData.movingAverage}
             style={{
               data: {
-                stroke: '#ff6b6b',
+                stroke: 'var(--color-error)',
                 strokeWidth: 2,
               },
             }}
@@ -142,7 +149,7 @@ export const Last30DaysTrendChart = () => {
             data={chartData.trendLine}
             style={{
               data: {
-                stroke: '#51cf66',
+                stroke: 'var(--color-success)',
                 strokeWidth: 2,
                 strokeDasharray: '3,3',
               },
@@ -150,58 +157,21 @@ export const Last30DaysTrendChart = () => {
           />
         </VictoryChart>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            gap: '12px',
-            marginTop: '4px',
-            fontSize: '12px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div
-              style={{
-                width: '16px',
-                height: '3px',
-                backgroundColor: 'var(--text-accent)',
-              }}
-            />
+        <div className="trend-chart-legend">
+          <div className="trend-chart-legend-item">
+            <div className="trend-chart-legend-line trend-chart-legend-line--actual" />
             <span>Actual</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div
-              style={{
-                width: '16px',
-                height: '2px',
-                backgroundColor: 'var(--text-accent)',
-                backgroundImage:
-                  'repeating-linear-gradient(90deg, transparent, transparent 3px, var(--text-accent) 3px, var(--text-accent) 6px)',
-              }}
-            />
+          <div className="trend-chart-legend-item">
+            <div className="trend-chart-legend-line trend-chart-legend-line--target" />
             <span>Target</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div
-              style={{
-                width: '16px',
-                height: '2px',
-                backgroundColor: '#ff6b6b',
-              }}
-            />
+          <div className="trend-chart-legend-item">
+            <div className="trend-chart-legend-line trend-chart-legend-line--average" />
             <span>7-day Avg</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <div
-              style={{
-                width: '16px',
-                height: '2px',
-                backgroundColor: '#51cf66',
-                backgroundImage:
-                  'repeating-linear-gradient(90deg, transparent, transparent 2px, #51cf66 2px, #51cf66 4px)',
-              }}
-            />
+          <div className="trend-chart-legend-item">
+            <div className="trend-chart-legend-line trend-chart-legend-line--trend" />
             <span>Trend</span>
           </div>
         </div>

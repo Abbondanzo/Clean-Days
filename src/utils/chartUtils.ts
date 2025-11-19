@@ -3,7 +3,7 @@ import { addDaysToDate, getToday } from './basicDateUtils';
 
 export interface ChartDataPoint {
   x: number;
-  y: number;
+  y: number | null;
   date: BasicDate;
 }
 
@@ -41,19 +41,21 @@ export const generateLast30DaysData = (
 export const calculateTrendLine = (
   data: ChartDataPoint[],
 ): ChartDataPoint[] => {
-  const n = data.length;
+  // Filter out null values for calculations
+  const validData = data.filter(point => point.y !== null);
+  const n = validData.length;
   if (n < 2) return data;
 
   // Simple linear regression
-  const sumX = data.reduce((sum, point) => sum + point.x, 0);
-  const sumY = data.reduce((sum, point) => sum + point.y, 0);
-  const sumXY = data.reduce((sum, point) => sum + point.x * point.y, 0);
-  const sumXX = data.reduce((sum, point) => sum + point.x * point.x, 0);
+  const sumX = validData.reduce((sum, point) => sum + point.x, 0);
+  const sumY = validData.reduce((sum, point) => sum + point.y!, 0);
+  const sumXY = validData.reduce((sum, point) => sum + point.x * point.y!, 0);
+  const sumXX = validData.reduce((sum, point) => sum + point.x * point.x, 0);
 
   const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
   const intercept = (sumY - slope * sumX) / n;
 
-  return data.map(point => ({
+  return validData.map(point => ({
     x: point.x,
     y: slope * point.x + intercept,
     date: point.date,
@@ -69,9 +71,12 @@ export const calculateMovingAverage = (
   for (let i = 0; i < data.length; i++) {
     const start = Math.max(0, i - window + 1);
     const end = i + 1;
-    const windowData = data.slice(start, end);
+    const windowData = data.slice(start, end).filter(point => point.y !== null);
+
+    if (windowData.length === 0) continue; // Skip if no valid data in window
+
     const average =
-      windowData.reduce((sum, point) => sum + point.y, 0) / windowData.length;
+      windowData.reduce((sum, point) => sum + point.y!, 0) / windowData.length;
 
     result.push({
       x: data[i].x,

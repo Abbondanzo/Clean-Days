@@ -1,0 +1,165 @@
+/* Charts component styles */
+
+/* Weekly Performance Chart */
+.weekly-chart-container {
+  width: 100%;
+}
+
+.weekly-chart-weeks-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28px, 1fr));
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 11px;
+  text-align: center;
+}
+
+.weekly-chart-week-item {
+  color: var(--text-secondary);
+}
+
+.weekly-chart-week-percentage {
+  font-weight: bold;
+}
+
+.weekly-chart-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.weekly-chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.weekly-chart-legend-color {
+  width: 12px;
+  height: 12px;
+}
+
+.weekly-chart-legend-color--excellent {
+  background-color: var(--color-success-bg);
+}
+
+.weekly-chart-legend-color--good {
+  background-color: var(--color-warning-bg);
+}
+
+.weekly-chart-legend-color--needs-improvement {
+  background-color: var(--color-error-bg);
+}
+
+/* Stats Overview */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.stats-item {
+  text-align: center;
+}
+
+.stats-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.stats-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.stats-summary {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.stats-summary-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stats-summary-value {
+  font-weight: bold;
+}
+
+.stats-progress-bar {
+  margin-top: 4px;
+  height: 4px;
+  background-color: var(--border-color);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stats-progress-fill {
+  height: 100%;
+  background-color: var(--color-success-bg);
+  border-radius: 2px;
+}
+
+/* Last 30 Days Trend Chart */
+.trend-chart-container {
+  width: 100%;
+}
+
+.trend-chart-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.trend-chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trend-chart-legend-line {
+  width: 16px;
+  height: 3px;
+}
+
+.trend-chart-legend-line--actual {
+  background-color: var(--text-accent);
+}
+
+.trend-chart-legend-line--target {
+  height: 2px;
+  background-color: var(--text-accent);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 3px,
+    var(--text-accent) 3px,
+    var(--text-accent) 6px
+  );
+}
+
+.trend-chart-legend-line--average {
+  height: 2px;
+  background-color: var(--color-error-bg);
+}
+
+.trend-chart-legend-line--trend {
+  height: 2px;
+  background-color: var(--color-success-bg);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    var(--color-success-bg) 2px,
+    var(--color-success-bg) 4px
+  );
+}
