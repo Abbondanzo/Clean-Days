@@ -1,17 +1,25 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSettingsStore } from '../../store/settingsStore';
 import { useTrackedDaysStore } from '../../store/trackedDaysStore';
 import type { BasicDate } from '../../types/BasicDate';
 import { getDayFromDate } from '../../utils/basicDateUtils';
-import { generateLast30DaysData } from '../../utils/chartUtils';
+import {
+  generateCurrentYearData,
+  generateLast30DaysData,
+  generateLifetimeData,
+  type EnhancedDailyStats,
+} from '../../utils/chartUtils';
 import { Widget } from '../theme/Widget';
 import './charts.css';
+
+type StatsPeriod = '30-day' | 'year' | 'lifetime';
 
 export const StatsOverview = () => {
   const trackedDays = useTrackedDaysStore(state => state.trackedDays);
   const { targetDrinks } = useSettingsStore();
+  const [selectedPeriod, setSelectedPeriod] = useState<StatsPeriod>('30-day');
 
-  const stats = useMemo(() => {
+  const result = useMemo(() => {
     const getCountByDate = (date: BasicDate) => {
       const curYear = trackedDays[date.year];
       if (!curYear) return -1; // Unset
@@ -26,7 +34,28 @@ export const StatsOverview = () => {
       return targetDrinks[dayIndex];
     };
 
-    const dailyData = generateLast30DaysData(getCountByDate, getTargetByDate);
+    let dailyData: EnhancedDailyStats[];
+
+    switch (selectedPeriod) {
+      case 'year':
+        dailyData = generateCurrentYearData(getCountByDate, getTargetByDate);
+        break;
+      case 'lifetime':
+        dailyData = generateLifetimeData(trackedDays, getTargetByDate);
+        break;
+      default: {
+        // Convert the basic stats to enhanced stats for consistency
+        const basicData = generateLast30DaysData(
+          getCountByDate,
+          getTargetByDate,
+        );
+        dailyData = basicData.map(day => ({
+          ...day,
+          success: day.count >= 0 && day.count <= day.target,
+        }));
+        break;
+      }
+    }
 
     // Only include days that have been set by the user (count >= 0)
     const setDays = dailyData.filter(day => day.count >= 0);
@@ -63,7 +92,9 @@ export const StatsOverview = () => {
       daysWithData: Math.max(0, daysWithData),
       currentStreak: Math.max(0, currentStreak),
     };
-  }, [trackedDays, targetDrinks]);
+  }, [trackedDays, targetDrinks, selectedPeriod]);
+
+  const stats = result;
 
   const getPercentageColor = (percentage: number) => {
     if (percentage >= 100) return 'var(--color-success)';
@@ -72,7 +103,24 @@ export const StatsOverview = () => {
   };
 
   return (
-    <Widget title="30-Day Summary">
+    <Widget
+      title={
+        <div className="stats-header">
+          <span>Summary</span>
+          <div className="period-selector">
+            <select
+              className="settings-select"
+              value={selectedPeriod}
+              onChange={e => setSelectedPeriod(e.target.value as StatsPeriod)}
+            >
+              <option value="30-day">30 Days</option>
+              <option value="year">Current Year</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+          </div>
+        </div>
+      }
+    >
       <div className="stats-grid">
         <div className="stats-item">
           <div className="stats-value">{stats.totalCount}</div>

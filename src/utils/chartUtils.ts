@@ -14,6 +14,10 @@ export interface DailyStats {
   percentage: number;
 }
 
+export interface EnhancedDailyStats extends DailyStats {
+  success: boolean;
+}
+
 export const generateLast30DaysData = (
   getCountByDate: (date: BasicDate) => number,
   getTargetByDate: (date: BasicDate) => number,
@@ -186,4 +190,82 @@ export const getWeeklySummary = (
   });
 
   return weeks;
+};
+
+/**
+ * Generates current year data from January 1st to today
+ */
+export const generateCurrentYearData = (
+  getCountByDate: (date: BasicDate) => number,
+  getTargetByDate: (date: BasicDate) => number,
+): EnhancedDailyStats[] => {
+  const today = getToday();
+  const currentYear = today.year;
+  const data: EnhancedDailyStats[] = [];
+
+  // Start from January 1st of current year
+  const startDate: BasicDate = { year: currentYear, month: 1, day: 1 };
+  let currentDate = startDate;
+
+  // Continue until today
+  while (
+    currentDate.year === currentYear &&
+    (currentDate.year < today.year ||
+      currentDate.month < today.month ||
+      currentDate.day <= today.day)
+  ) {
+    const count = getCountByDate(currentDate);
+    const target = getTargetByDate(currentDate);
+    const success = count >= 0 && count <= target;
+
+    data.push({
+      date: { ...currentDate },
+      count,
+      target,
+      percentage: target > 0 ? (count / target) * 100 : 0,
+      success,
+    });
+
+    // Move to next day using basicDateUtils
+    currentDate = addDaysToDate(currentDate, 1);
+  }
+
+  return data;
+};
+
+/**
+ * Generates lifetime data from all tracked days in the store
+ */
+export const generateLifetimeData = (
+  trackedDays: Record<number, Record<number, number[]>>,
+  getTargetByDate: (date: BasicDate) => number,
+): EnhancedDailyStats[] => {
+  const data: EnhancedDailyStats[] = [];
+
+  // Iterate through all years in trackedDays
+  Object.entries(trackedDays).forEach(([yearStr, yearData]) => {
+    const year = parseInt(yearStr, 10);
+
+    Object.entries(yearData).forEach(([monthStr, monthData]) => {
+      const month = parseInt(monthStr, 10);
+
+      monthData.forEach((count, dayIndex) => {
+        if (typeof count === 'number') {
+          const date: BasicDate = { year, month, day: dayIndex + 1 };
+          const target = getTargetByDate(date);
+          const success = count >= 0 && count <= target;
+
+          data.push({
+            date,
+            count,
+            target,
+            percentage: target > 0 ? (count / target) * 100 : 0,
+            success,
+          });
+        }
+      });
+    });
+  });
+
+  return data;
 };
