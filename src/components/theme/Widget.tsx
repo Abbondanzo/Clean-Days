@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
-  title?: string;
+  title?: ReactNode;
 }
 
 export const Widget = ({ children, title }: Props) => {

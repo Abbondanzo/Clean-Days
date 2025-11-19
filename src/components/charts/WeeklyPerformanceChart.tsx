@@ -12,7 +12,7 @@ import { Widget } from '../theme/Widget';
 
 export const WeeklyPerformanceChart = () => {
   const trackedDays = useTrackedDaysStore(state => state.trackedDays);
-  const { targetDrinks } = useSettingsStore();
+  const { targetDrinks, startOfWeek } = useSettingsStore();
 
   const chartData = useMemo(() => {
     const getCountByDate = (date: BasicDate) => {
@@ -30,22 +30,25 @@ export const WeeklyPerformanceChart = () => {
     };
 
     const dailyData = generateLast30DaysData(getCountByDate, getTargetByDate);
-    const weeklyData = getWeeklySummary(dailyData);
+    const weeklyData = getWeeklySummary(dailyData, startOfWeek);
 
     // Filter out weeks with no tracked data (averageCount and averagePercentage both 0 means no days were set)
     const weeksWithData = weeklyData.filter(
       week => !(week.averageCount === 0 && week.averagePercentage === 0),
     );
 
-    return weeksWithData.slice(0, 4).map((week, index) => ({
-      week: `Week ${index + 1}`,
+    // Take up to 4 weeks and display them chronologically (oldest to newest)
+    const last4Weeks = weeksWithData.slice(0, 4).reverse(); // Reverse to show oldest first
+
+    return last4Weeks.map((week, index) => ({
+      week: `${week.week}`, // Use the actual date range from the week
       x: index + 1,
       y: week.averagePercentage,
       label: `${week.averagePercentage}%`,
       actualCount: week.averageCount,
       target: week.averageTarget,
     }));
-  }, [trackedDays, targetDrinks]);
+  }, [trackedDays, targetDrinks, startOfWeek]);
 
   const getBarColor = (percentage: number) => {
     if (percentage >= 100) return '#51cf66'; // Green for meeting/exceeding target
@@ -59,9 +62,9 @@ export const WeeklyPerformanceChart = () => {
         <VictoryChart
           theme={VictoryTheme.material}
           width={350}
-          height={160}
+          height={200}
           padding={{ left: 50, right: 20, top: 20, bottom: 40 }}
-          domainPadding={{ x: 40 }}
+          domainPadding={{ x: 50 }}
         >
           <VictoryAxis
             dependentAxis
@@ -81,7 +84,7 @@ export const WeeklyPerformanceChart = () => {
             style={{
               axis: { stroke: 'var(--border-color)' },
               tickLabels: {
-                fontSize: 10,
+                fontSize: 12,
                 fill: 'var(--text-secondary)',
                 fontFamily: "'Space Mono', 'Courier New', monospace",
               },
@@ -106,7 +109,7 @@ export const WeeklyPerformanceChart = () => {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(28px, 1fr))',
             gap: '8px',
             marginTop: '4px',
             fontSize: '11px',

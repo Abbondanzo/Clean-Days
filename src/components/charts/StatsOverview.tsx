@@ -77,7 +77,6 @@ export const StatsOverview = () => {
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
           gap: '16px',
-          fontFamily: "'Space Mono', 'Courier New', monospace",
         }}
       >
         <div style={{ textAlign: 'center' }}>

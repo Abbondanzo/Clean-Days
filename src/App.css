@@ -28,6 +28,7 @@
   flex-direction: column;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  overflow-x: hidden;
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -51,8 +52,8 @@
   justify-content: center;
   align-items: flex-start;
   gap: 32px;
-  padding: 16px;
-  overflow-x: auto;
+  padding: 8px;
+  overflow: auto;
 }
 
 .stack-container {
@@ -64,7 +65,7 @@
 
 .stack-label {
   color: var(--text-primary);
-  margin: 0 0 8px 0;
+  margin-bottom: 8px;
   font-size: 20px;
   padding: 0 16px;
   width: 100%;
@@ -76,8 +77,7 @@
   border-radius: 16px;
   width: min(393px, 100vw - 64px);
   height: 852px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   background: var(--bg-secondary);
   color: var(--text-primary);
   padding: 12px;
@@ -92,13 +92,6 @@
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-}
-
-.content-container {
-  padding: 12px;
-  flex: 1;
-  overflow-y: auto;
   overflow-x: hidden;
 }
 
@@ -149,13 +142,13 @@
 }
 
 .widget h3 {
-  margin: 0 0 8px 0;
+  margin-bottom: 8px;
   color: var(--text-primary);
   font-size: 18px;
 }
 
 .widget p {
-  margin: 0 0 12px 0;
+  margin-bottom: 12px;
   color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.4;
@@ -272,18 +265,16 @@
   min-height: 48px;
   max-width: 48px;
   max-height: 48px;
-  border-radius: 50%;
   border: 2px solid var(--text-accent);
+  border-radius: 50%;
   background-color: transparent;
   color: var(--text-accent);
-  font-size: 28px;
-  font-weight: bold;
+  font: bold 28px/1 inherit;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
   flex-shrink: 0;
   padding: 0;
 }
@@ -394,22 +385,14 @@
 
 /* Hide number input spinners for target inputs */
 .target-input::-webkit-outer-spin-button,
-.target-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.target-input[type='number'] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
+.target-input::-webkit-inner-spin-button,
 .target-drinks-row .settings-input::-webkit-outer-spin-button,
 .target-drinks-row .settings-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
+.target-input[type='number'],
 .target-drinks-row .settings-input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
@@ -418,18 +401,16 @@
 .target-button {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
   border: 2px solid var(--text-accent);
+  border-radius: 50%;
   background-color: transparent;
   color: var(--text-accent);
-  font-size: 18px;
-  font-weight: bold;
+  font: bold 18px/1 inherit;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1;
   flex-shrink: 0;
   padding: 0;
 }
@@ -657,10 +638,6 @@
 /* Ensure no element causes horizontal overflow */
 * {
   box-sizing: border-box;
-}
-
-.root-container {
-  overflow-x: hidden;
 }
 
 /* Space Mono font optimizations */

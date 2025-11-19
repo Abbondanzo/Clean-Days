@@ -158,7 +158,6 @@ export const Last30DaysTrendChart = () => {
             gap: '12px',
             marginTop: '4px',
             fontSize: '12px',
-            fontFamily: "'Space Mono', 'Courier New', monospace",
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

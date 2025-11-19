@@ -83,8 +83,28 @@ export const calculateMovingAverage = (
   return result;
 };
 
+const getWeekStart = (date: BasicDate, startOfWeek: number): BasicDate => {
+  // Convert date to JavaScript Date to calculate day of week
+  const jsDate = new Date(date.year, date.month - 1, date.day);
+  const dayOfWeek = jsDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+  // Calculate days to subtract to get to start of week
+  const daysToSubtract = (dayOfWeek - startOfWeek + 7) % 7;
+
+  // Subtract days to get week start
+  const weekStartDate = new Date(jsDate);
+  weekStartDate.setDate(jsDate.getDate() - daysToSubtract);
+
+  return {
+    year: weekStartDate.getFullYear(),
+    month: weekStartDate.getMonth() + 1,
+    day: weekStartDate.getDate(),
+  };
+};
+
 export const getWeeklySummary = (
   dailyData: DailyStats[],
+  startOfWeek: number,
 ): Array<{
   week: string;
   averageCount: number;
@@ -98,11 +118,21 @@ export const getWeeklySummary = (
     averagePercentage: number;
   }> = [];
 
-  // Group by weeks (7-day chunks)
-  for (let i = 0; i < dailyData.length; i += 7) {
-    const weekData = dailyData.slice(i, i + 7);
-    if (weekData.length === 0) continue;
+  // Group by actual calendar weeks
+  const weekGroups = new Map<string, DailyStats[]>();
 
+  dailyData.forEach(day => {
+    const weekStart = getWeekStart(day.date, startOfWeek);
+    const weekKey = `${weekStart.year}-${weekStart.month}-${weekStart.day}`;
+
+    if (!weekGroups.has(weekKey)) {
+      weekGroups.set(weekKey, []);
+    }
+    weekGroups.get(weekKey)!.push(day);
+  });
+
+  // Process each week group
+  for (const [, weekData] of weekGroups) {
     // Only include days that have been set (count >= 0)
     const setDaysInWeek = weekData.filter(day => day.count >= 0);
 
@@ -125,9 +155,9 @@ export const getWeeklySummary = (
       successRate = (successfulDays / setDaysInWeek.length) * 100;
     }
 
-    const weekStart = weekData[0].date;
-    const weekEnd = weekData[weekData.length - 1].date;
-    const weekLabel = `${weekStart.month}/${weekStart.day} - ${weekEnd.month}/${weekEnd.day}`;
+    // Use the actual week start date
+    const weekStart = getWeekStart(weekData[0].date, startOfWeek);
+    const weekLabel = `${weekStart.month}/${weekStart.day}`;
 
     weeks.push({
       week: weekLabel,
@@ -137,5 +167,18 @@ export const getWeeklySummary = (
     });
   }
 
-  return weeks.reverse(); // Most recent first
+  // Sort weeks by parsing the date from the week label (most recent first)
+  weeks.sort((a, b) => {
+    const [monthA, dayA] = a.week.split('/').map(Number);
+    const [monthB, dayB] = b.week.split('/').map(Number);
+
+    // Assume current year for comparison
+    const currentYear = new Date().getFullYear();
+    const dateA = new Date(currentYear, monthA - 1, dayA);
+    const dateB = new Date(currentYear, monthB - 1, dayB);
+
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  return weeks;
 };
