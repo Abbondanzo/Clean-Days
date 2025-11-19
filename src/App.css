@@ -239,7 +239,7 @@
   cursor: pointer;
 }
 
-.settings-checkbox input[type="checkbox"] {
+.settings-checkbox input[type='checkbox'] {
   accent-color: var(--text-accent);
 }
 
@@ -399,7 +399,7 @@
   margin: 0;
 }
 
-.target-input[type="number"] {
+.target-input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
@@ -410,7 +410,7 @@
   margin: 0;
 }
 
-.target-drinks-row .settings-input[type="number"] {
+.target-drinks-row .settings-input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
 }

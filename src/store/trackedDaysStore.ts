@@ -22,7 +22,7 @@ const getEmptyMonthArray = (date: BasicDate): number[] => {
 export const useTrackedDaysStore = create<Store>()(
   devtools(
     persist(
-      (set) => ({
+      set => ({
         trackedDays: {},
         setCountForDay: (date, count) => {
           set(
@@ -40,7 +40,7 @@ export const useTrackedDaysStore = create<Store>()(
       {
         name: 'tracked-days-storage',
         version: 0,
-        migrate: (persistedState) => {
+        migrate: persistedState => {
           console.log('On version 0, no migration necessary');
           return persistedState;
         },

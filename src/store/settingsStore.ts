@@ -15,7 +15,7 @@ interface Store {
 export const useSettingsStore = create<Store>()(
   devtools(
     persist(
-      (set) => ({
+      set => ({
         startOfWeek: DEFAULT_DAY_OF_WEEK,
         setStartOfWeek: (newDayOfWeek: number) => {
           set(
@@ -36,7 +36,7 @@ export const useSettingsStore = create<Store>()(
       {
         name: 'settings-storage',
         version: 0,
-        migrate: (persistedState) => {
+        migrate: persistedState => {
           console.log('On version 0, no migration necessary');
           return persistedState;
         },

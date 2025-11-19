@@ -41,10 +41,10 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
   );
 
   const goToPrevWeek = useCallback(() => {
-    setWeekOffset((oldOffset) => oldOffset - 1);
+    setWeekOffset(oldOffset => oldOffset - 1);
   }, []);
   const goToNextWeek = useCallback(() => {
-    setWeekOffset((oldOffset) => oldOffset + 1);
+    setWeekOffset(oldOffset => oldOffset + 1);
   }, []);
   const goToCurrentWeek = useCallback(() => {
     setWeekOffset(0);

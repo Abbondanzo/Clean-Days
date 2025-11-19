@@ -29,7 +29,7 @@ export const StartOfWeekWidget = () => {
           value={startOfWeek}
           onChange={handleChange}
         >
-          {OPTIONS.map((option) => (
+          {OPTIONS.map(option => (
             <option key={option.value} value={option.value}>
               {option.title}
             </option>
