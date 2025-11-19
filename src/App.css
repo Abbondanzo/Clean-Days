@@ -1,0 +1,705 @@
+/* Theme variables */
+.theme-light {
+  --bg-primary: #c5c8ce;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-accent: #0066cc;
+  --border-color: #cccccc;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+.theme-dark {
+  --bg-primary: #0b0e17;
+  --bg-secondary: #1a1f2e;
+  --bg-tertiary: #2a2f3e;
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-accent: #66aaff;
+  --border-color: #444444;
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+.root-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.options-container {
+  padding: 16px;
+  background: var(--shadow);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.options-container-contents {
+  max-width: 1320px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.content-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 32px;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+.stack-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.stack-label {
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  padding: 0 16px;
+  width: 100%;
+  text-align: left;
+  font-weight: 600;
+}
+
+.component-container {
+  border-radius: 16px;
+  width: min(393px, 100vw - 64px);
+  height: 852px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 12px;
+  box-shadow: 0 4px 12px var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+.container {
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.content-container {
+  padding: 12px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.scroll-view-child {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-container h1 {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.theme-toggle-button {
+  font-size: 12px;
+  user-select: none;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--text-accent);
+}
+
+/* Widget styling */
+.widget {
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.widget h3 {
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  font-size: 18px;
+}
+
+.widget p {
+  margin: 0 0 12px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.date-display,
+.count-display {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.count-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.count-button {
+  background-color: var(--text-accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.count-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.count-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-primary);
+  min-width: 40px;
+  text-align: center;
+}
+
+.settings-select,
+.settings-input {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 8px 12px;
+  color: var(--text-primary);
+  font-size: 14px;
+  width: 100%;
+}
+
+.settings-select {
+  max-width: none;
+}
+
+.settings-input {
+  max-width: 200px;
+}
+
+.settings-select:focus,
+.settings-input:focus {
+  outline: none;
+  border-color: var(--text-accent);
+  box-shadow: 0 0 0 2px rgba(102, 170, 255, 0.2);
+}
+
+.settings-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.settings-checkbox input[type="checkbox"] {
+  accent-color: var(--text-accent);
+}
+
+/* Widget title styling */
+.widget-title {
+  margin: 0 0 16px 0;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* DrinkCountEditor styles */
+.drink-count-editor-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  gap: 12px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.count-button-large {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  max-width: 48px;
+  max-height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--text-accent);
+  background-color: transparent;
+  color: var(--text-accent);
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.count-button-large:hover {
+  background-color: var(--text-accent);
+  color: white;
+  transform: scale(1.05);
+}
+
+.count-button-large:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.count-button-large.plus {
+  background-color: var(--text-accent);
+  color: white;
+}
+
+.count-button-large.plus:hover {
+  background-color: var(--text-primary);
+}
+
+.drink-count-display {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  gap: 8px;
+}
+
+.drink-count-text {
+  font-size: clamp(32px, 8vw, 48px);
+  font-weight: bold;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.target-text {
+  font-size: clamp(16px, 4vw, 20px);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Settings components */
+.settings-field {
+  margin-bottom: 16px;
+}
+
+.settings-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.target-drinks-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.target-drinks-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.target-drinks-row .settings-label {
+  min-width: 60px;
+  margin-bottom: 0;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.target-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.target-drinks-row .settings-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  padding: 8px 12px;
+  text-align: center;
+  max-width: none;
+}
+
+.target-input {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 16px;
+  padding: 8px 12px;
+  max-width: none;
+}
+
+/* Hide number input spinners for target inputs */
+.target-input::-webkit-outer-spin-button,
+.target-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.target-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.target-drinks-row .settings-input::-webkit-outer-spin-button,
+.target-drinks-row .settings-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.target-drinks-row .settings-input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.target-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--text-accent);
+  background-color: transparent;
+  color: var(--text-accent);
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.target-button:hover {
+  background-color: var(--text-accent);
+  color: white;
+  transform: scale(1.05);
+}
+
+.target-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.target-button-plus {
+  background-color: var(--text-accent);
+  color: white;
+}
+
+.target-button-plus:hover {
+  background-color: var(--text-primary);
+}
+
+/* Week picker styles */
+.week-row {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  padding: 2px;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.week-button {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.week-button:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.week-button.primary {
+  background-color: var(--text-accent);
+  color: white;
+  border-color: var(--text-accent);
+}
+
+.week-button.primary:hover {
+  background-color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+.week-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.week-button.ghost {
+  background-color: transparent;
+  color: var(--text-accent);
+  border-color: var(--text-accent);
+}
+
+.week-button.secondary {
+  background-color: transparent;
+  border-color: var(--border-color);
+}
+
+/* Week picker item styles */
+.week-picker-item {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px;
+  border-radius: 16px;
+  border: 3px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.week-picker-item.disabled {
+  opacity: 0.3;
+}
+
+.week-picker-item .date-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.week-picker-item.selected .date-text {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.week-picker-item .count-container {
+  width: 100%;
+  height: 48px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 1px;
+  min-width: 32px;
+}
+
+.week-picker-item .count-container:hover {
+  border-color: var(--text-accent);
+}
+
+.week-picker-item .count-container:disabled {
+  cursor: not-allowed;
+  transform: none;
+}
+
+.week-picker-item.selected {
+  border-color: var(--text-accent);
+  background-color: rgba(102, 170, 255, 0.1);
+}
+
+.week-picker-item.selected .count-container {
+  border-color: var(--text-accent);
+  background-color: var(--text-accent);
+}
+
+.week-picker-item.danger .count-container {
+  background-color: #ff4444;
+  border-color: #ff4444;
+}
+
+.week-picker-item.warning .count-container {
+  background-color: #ffaa44;
+  border-color: #ffaa44;
+}
+
+.week-picker-item.good .count-container {
+  background-color: #44dd44;
+  border-color: #44dd44;
+}
+
+.week-picker-item.selected.danger .count-container {
+  background-color: #ff4444;
+}
+
+.week-picker-item.selected.warning .count-container {
+  background-color: #ffaa44;
+}
+
+.week-picker-item.selected.good .count-container {
+  background-color: #44dd44;
+}
+
+.week-picker-item .count-text {
+  font-weight: bold;
+  font-size: clamp(12px, 2.5vw, 16px);
+  user-select: none;
+  color: var(--text-primary);
+}
+
+.week-picker-item.danger .count-text,
+.week-picker-item.warning .count-text,
+.week-picker-item.good .count-text {
+  color: white;
+}
+
+/* Additional responsive fixes for large numbers */
+@media (max-width: 480px) {
+  .drink-count-editor-container {
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  .count-button-large {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    font-size: 24px;
+    padding: 0;
+  }
+
+  .drink-count-text {
+    font-size: clamp(24px, 6vw, 32px);
+  }
+
+  .target-text {
+    font-size: clamp(14px, 3vw, 16px);
+  }
+
+  .widget {
+    padding: 8px;
+    margin-bottom: 8px;
+  }
+}
+
+/* Ensure no element causes horizontal overflow */
+* {
+  box-sizing: border-box;
+}
+
+.root-container {
+  overflow-x: hidden;
+}
+
+/* Space Mono font optimizations */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.05em;
+  line-height: 1.4;
+}
+
+.drink-count-text {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.1em;
+}
+
+.count-text {
+  font-variant-numeric: tabular-nums;
+}
+
+.target-text {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Improve button text readability */
+button {
+  letter-spacing: -0.025em;
+}
+
+/* Improve input readability */
+input,
+select {
+  font-family: inherit;
+  letter-spacing: -0.025em;
+}
+
+/* Global text styling */
+* {
+  color: inherit;
+}
