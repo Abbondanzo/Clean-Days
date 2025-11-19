@@ -41,14 +41,31 @@ export const WeekPicker = ({ selectedDate, setSelectedDate }: Props) => {
   );
 
   const goToPrevWeek = useCallback(() => {
-    setWeekOffset(oldOffset => oldOffset - 1);
-  }, []);
+    setWeekOffset(oldOffset => {
+      const newOffset = oldOffset - 1;
+      const newWeekStart = addDaysToDate(
+        getCurrentWeek(startOfWeek),
+        newOffset * 7,
+      );
+      setSelectedDate(newWeekStart);
+      return newOffset;
+    });
+  }, [startOfWeek, setSelectedDate]);
   const goToNextWeek = useCallback(() => {
-    setWeekOffset(oldOffset => oldOffset + 1);
-  }, []);
+    setWeekOffset(oldOffset => {
+      const newOffset = oldOffset + 1;
+      const newWeekStart = addDaysToDate(
+        getCurrentWeek(startOfWeek),
+        newOffset * 7,
+      );
+      setSelectedDate(newWeekStart);
+      return newOffset;
+    });
+  }, [startOfWeek, setSelectedDate]);
   const goToCurrentWeek = useCallback(() => {
     setWeekOffset(0);
-  }, []);
+    setSelectedDate(getToday());
+  }, [setSelectedDate]);
   const isCurrentWeek = useMemo(() => weekOffset === 0, [weekOffset]);
 
   const title = useMemo(() => {
